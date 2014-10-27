@@ -118,3 +118,42 @@ header{
   stroke: steelblue;
   stroke-width: 1.5px;
 }
+
+@media (max-width: 1000px){
+  #pie-chart, #bar-chart{
+    display:block;
+    float:none;
+    margin:40px auto;
+
+  }
+}
+
+@media (max-width: 700px){
+  .pie-tooltip {
+    display:none;
+  }
+
+  header{
+    padding:20px;
+  }
+  .team-selectors{
+    display:block;
+    float:none;
+    margin:60px;
+  }
+
+  .styled-select{
+    height:50px;
+    margin:10px;
+    display:block;
+  }
+
+  .display-date{
+    margin:auto;
+    display:block;
+  }
+
+  .team-section{
+    padding:5px;
+  }
+}
