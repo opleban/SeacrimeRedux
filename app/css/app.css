@@ -1,0 +1,41 @@
+#map{
+  height:300px;
+  width:auto;
+}
+
+#charts{
+}
+
+#pie-chart, #bar-chart{
+  display:inline-block;
+  height:350px;
+}
+
+.pie-tooltip {
+  position: absolute;
+  width: 200px;
+  height: auto;
+  padding:10px;
+  border: solid black 1px;
+  pointer-events: none;
+  color:steelblue;
+  background-color: #FFF
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+  stroke-width: 1.5px;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Coding Redux</title>
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="/bower_components/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" href="/bower_components/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="/bower_components/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/leaflet/dist/leaflet.js"></script>
+    <script src="/bower_components/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <script src="/bower_components/underscore/underscore-min.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <select class="year-selection">
+        <option>Select year</option>
+        <option value=2012>2012</option>
+        <option value=2013>2013</option>
+        <option value=2014>2014</option>
+      </select>
+      <select class="team-selection">
+        <option>Select a team</option>
+      </select>
+    </header>
+<!--     <div id="map"></div> -->
+    <div id="charts">
+      <div id="pie-chart"></div>
+      <div id="bar-chart"></div>
+    </div>
+    <footer>
+    </footer>
+
+    <script id="select-template" type="text/template">
+      <option>Select a team</option>
+      <% _.each( data, function( team ){ %>
+        <option x-team-name=<%= team.teamName %> x-game-date=<%= team.gameDate %>> <%=team.teamName %></option>
+      <% }) %>
+    </script>
+
+    <script src="/bower_components/d3/d3.min.js"></script>
+    <script src="js/SoQl_Query_Maker.js"></script>
+    <script src="js/Data_Fetcher.js"></script>
+    <script src="js/Map_View.js"></script>
+    <script src="js/Chart_View.js"></script>
+    <script src="js/App_View.js"></script>
+    <script src="js/Bar_Graph.js"></script>
+  </body>
+
+</html>

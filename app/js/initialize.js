@@ -1,0 +1,1 @@
+// AppView.initialize();
