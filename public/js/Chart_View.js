@@ -1,4 +1,4 @@
-var ChartView = (function($, d3, _, DataFetcher, BarGraph){
+var ChartView = (function($, d3, _, DataFetcher, BarGraph, MapView){
 
   function getYear(dateString){
     return dateString.slice(0, 5);
@@ -7,7 +7,7 @@ var ChartView = (function($, d3, _, DataFetcher, BarGraph){
     BarGraph.draw(eventGroup);
   }
 
-  function renderNumberOfCrimes(number){
+  function displayNumberOfCrimes(number){
     var $crimeTotal = $("#crime-total");
     var totalCrimeTemplate =  _.template($("#crime-total-template").html())({number:number});
     $crimeTotal.empty();
@@ -47,8 +47,8 @@ var ChartView = (function($, d3, _, DataFetcher, BarGraph){
           crime.total = +crime.total;
           totalCrimeFigure += crime.total;
         });
-
-        renderNumberOfCrimes(totalCrimeFigure);
+        // appends a sentence over the pie chart displaying the total number of crimes
+        displayNumberOfCrimes(totalCrimeFigure);
 
         var g = svg.selectAll(".arc")
             .data(pie(data))
@@ -74,11 +74,11 @@ var ChartView = (function($, d3, _, DataFetcher, BarGraph){
                   .duration(200)
                   .style('opacity', 0);
           })
-
           .on('click', function(d){
             drawBarGraph(d.data.event_clearance_group);
-          })
+            MapView.renderCrimeDataByEventGroup(d.data.event_clearance_group);
+          });
       });
     }
   };
-}(jQuery, d3, _, DataFetcher, BarGraph));
+}(jQuery, d3, _, DataFetcher, BarGraph, MapView));

@@ -6,7 +6,7 @@ var MapView = (function($, _, L, DataFetcher){
 
   function createMap(){
     if ($('#map').length)
-      return L.map("map", {center:CENTURYLINK_COORDINATES, zoom:14})
+      return L.map("map", {center:CENTURYLINK_COORDINATES, zoom:14, scrollWheelZoom:false})
                   .addLayer(new L.TileLayer(MAPBOX_URL));
   }
 
@@ -31,6 +31,10 @@ var MapView = (function($, _, L, DataFetcher){
   }
 
   return {
+    renderCrimeDataByEventGroup: function(eventGroup){
+      DataFetcher.getCrimeDataByEventGroup(eventGroup, renderCrimeDataOnMap);
+    },
+
     renderCrimeData: function(date){
       // if no date is provided, then map will display most recent crime data. If a date is provided, then map will display only crime data from that date.
       if (date){

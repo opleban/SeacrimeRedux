@@ -12,9 +12,18 @@ header{
 }
 
 .head-title{
-  float:left;
   display:inline-block;
   font-variant:bold;
+}
+
+.team-section{
+  margin:auto;
+  background-color:#00163F;
+  color:#FFF;
+}
+
+.display-date{
+  float:left;
 }
 
 .team-selectors{
@@ -29,9 +38,10 @@ header{
   padding: 5px;
   font-size: 16px;
   line-height: 1;
-  border: 1px solid black;
+  border: 1px solid white;
   border-radius: 0;
   height: 30px;
+  color:white;
 }
 
 .map-container{
@@ -61,6 +71,14 @@ header{
   display:inline-block;
   height:350px;
   text-align:center;
+}
+
+#pie-chart{
+  float: left;
+}
+
+#bar-chart{
+  float: right;
 }
 
 

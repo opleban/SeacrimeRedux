@@ -15,11 +15,23 @@
   </head>
 
   <body>
-
     <header>
       <div class="head-title">
         <h1>CenturyLink Crime</h1>
       </div>
+    </header>
+
+    <div class="team-section">
+      <div class="team-explaner">
+        <div class="container">
+          <h2>Game Day Criminality</h2>
+          <p> Select a season year and a team name. The interative map will display crime data from the day of the Seahawk's regular season home game against the selected team.</p>
+          <div class="display-date">
+            <h2>Displaying crime data for: <span id="date">2014</span></h2>
+          </div>
+        </div>
+      </div>
+
       <div class="team-selectors">
         <select class="styled-select year-selection">
           <option>Select year</option>
@@ -29,34 +41,44 @@
           <option>Select a team</option>
         </select>
       </div>
+
       <div class="clearfloat"></div>
-    </header>
+    </div>
+
     <div class="map-container">
       <div id="map"></div>
     </div>
-    <div id="charts">
+
+    <div class="chart-section">
       <div class="chart-header">
         <div class="container">
           <h2>2014 Crime Overview</h2>
-          <p> The pie chart below displays a breakdown of crime within a mile of CenturyLink Stadium in 2014 by the type of incidence. For further details, click on any pie slice to see a chart displaying the number of those incidences that occurred during each month.</p>
+          <p> The pie chart below displays a breakdown of crime within a mile of CenturyLink Stadium in 2014 by the type of incidence. For further details, click on any pie slice to view a chart displaying the number of those incidences that occurred during each month. Scroll up, as well, to see the same data displayed on the map above. </p>
         </div>
       </div>
-      <div id="pie-chart">
-        <div id="crime-total"></div>
-      </div>
-      <div id="bar-chart"></div>
-    </div>
-    <footer>
-    </footer>
 
+      <div class="chart-container">
+        <div id="pie-chart">
+          <div id="crime-total"></div>
+        </div>
+        <div id="bar-chart"></div>
+        <div class="clearfloat"></div>
+      </div>
+
+    </div>
+<!-- Template that generates select options with team names.
+See App_View.js-->
     <script id="select-template" type="text/template">
       <option>Select a team</option>
       <% _.each( data, function( team ){ %>
         <option x-team-name=<%= team.teamName %> x-game-date=<%= team.gameDate %>> <%=team.teamName %></option>
       <% }) %>
     </script>
+
+<!-- Template that generates statement with the total number of crimes.
+See Chart_View.js-->
     <script id="crime-total-template" type="text/template">
-      <h3>total number of reported crimes: <%= number %></h3>
+      <h3>Total number of reported crimes: <%= number %></h3>
     </script>
 
     <script src="js/SoQL_Query_Maker.js"></script>

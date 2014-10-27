@@ -1,6 +1,21 @@
 var AppView = (function($, _, DataFetcher, MapView, ChartView){
   var $yearSelection = $("select.year-selection");
   var $teamSelection = $("select.team-selection");
+  var $displayDate = $('#date');
+
+  function formatGameDate(date){
+    return date.slice(0,10);
+  }
+
+  function displayDataDate(date){
+    if (date) {
+      var dateToDisplay = formatGameDate(date);
+    } else {
+      var dateToDisplay = "2014";
+    }
+    $displayDate.empty();
+    $displayDate.html(dateToDisplay);
+  }
 
   function listenForYearSelection(){
     $yearSelection.change(function(){
@@ -20,7 +35,9 @@ var AppView = (function($, _, DataFetcher, MapView, ChartView){
     });
   }
 
+//Pie Chart always displays aggregate data for 2014, only the map re-renders
   function render(date){
+    displayDataDate(date);
     if ($('#map').length)
       MapView.renderCrimeData(date);
     if (!($('#pie-chart svg').length))

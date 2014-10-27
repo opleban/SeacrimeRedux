@@ -67,6 +67,18 @@ var DataFetcher = (function($, SoQLQueryMaker){
         .fail(function(e){
           console.log("Error fetching data!");
         });
+    },
+
+    getAggregateCrimeDataByEventGroup: function(eventGroup, callbackFn){
+      var query = SoQLQueryMaker.aggregateCrimeDataByEventGroup(eventGroup);
+      $.getJSON(query, function(data, status){
+        if (callbackFn){
+          callbackFn(data);
+        } else{ console.log("No callback provided"); }
+      })
+        .fail(function(e){
+          console.log("Error fetching data!");
+        });
     }
   };
 }(jQuery, SoQLQueryMaker));
