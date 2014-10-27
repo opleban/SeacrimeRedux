@@ -42,7 +42,7 @@ var BarGraph = (function(d3, DataFetcher){
 
         var rect = svg.selectAll("rect").data(data);
         rect.enter().append("rect");
-        rect.transition().duration(1000)
+        rect.transition().duration(500)
           .style("fill", "#4EAE47")
           .attr("class", "bar")
           .attr("width", barWidth)
@@ -59,7 +59,7 @@ var BarGraph = (function(d3, DataFetcher){
 
         var text = svg.selectAll("text").data(data);
         text.enter().append("text");
-        text.transition().duration(1000)
+        text.transition().duration(500)
           .attr("class", "bar-text")
           .text(function(d) { return d.total; })
           .attr("x", function(d, i){ return i * (width/data.length) + barWidth/2; })
