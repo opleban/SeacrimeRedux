@@ -1,4 +1,4 @@
-var ChartView = (function($, d3, DataFetcher, BarGraph){
+var ChartView = (function($, d3, _, DataFetcher, BarGraph){
 
   function getYear(dateString){
     return dateString.slice(0, 5);
@@ -6,8 +6,17 @@ var ChartView = (function($, d3, DataFetcher, BarGraph){
   function drawBarGraph(eventGroup){
     BarGraph.draw(eventGroup);
   }
+
+  function renderNumberOfCrimes(number){
+    var $crimeTotal = $("#crime-total");
+    var totalCrimeTemplate =  _.template($("#crime-total-template").html())({number:number});
+    $crimeTotal.empty();
+    $crimeTotal.append(totalCrimeTemplate);
+  }
+
   return {
 
+// Need to refactor PieChart out to separate a module
     renderHalfPieChart: function(){
       var width = 600;
       var height = 350;
@@ -32,12 +41,14 @@ var ChartView = (function($, d3, DataFetcher, BarGraph){
         .append("g")
           .attr("transform", "translate(" + width / 2 + "," + width/2 + ")" + "rotate(" + 270 +")");
 
-      var path = svg.selectAll("path");
-
       DataFetcher.getAggregateCrimeData(function(data){
+        var totalCrimeFigure = 0;
         data.forEach(function(crime){
           crime.total = +crime.total;
+          totalCrimeFigure += crime.total;
         });
+
+        renderNumberOfCrimes(totalCrimeFigure);
 
         var g = svg.selectAll(".arc")
             .data(pie(data))
@@ -70,4 +81,4 @@ var ChartView = (function($, d3, DataFetcher, BarGraph){
       });
     }
   };
-}(jQuery, d3, DataFetcher, BarGraph));
+}(jQuery, d3, _, DataFetcher, BarGraph));

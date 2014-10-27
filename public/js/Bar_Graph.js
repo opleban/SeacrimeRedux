@@ -6,7 +6,7 @@ var BarGraph = (function(d3, DataFetcher){
   }
 
   //Sets svg dimensions
-  var margin = {top: 20, right: 20, bottom: 20, left: 20};
+  var margin = {top: 20, right: 20, bottom: 10, left: 20};
   var width = 400 - margin.left - margin.right;
   var height = 400 - margin.top - margin.bottom;
 
@@ -19,6 +19,18 @@ var BarGraph = (function(d3, DataFetcher){
     //draw function, creates the bar graph
     //It is also called to update the bar graph
     draw: function(eventGroup){
+      var chartTitle = svg.selectAll("text.chart-title").data([eventGroup]);
+      chartTitle.enter().append("text");
+      chartTitle.transition().duration(500)
+        .attr("class", "chart-title")
+        .text(eventGroup)
+        .attr("text-anchor", "middle")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "20px")
+        .attr("fill", "black")
+        .attr("x", width/2)
+        .attr("y", 15);
+
       DataFetcher.getCrimeDataByEventGroup(eventGroup, function(data){
         data.forEach( function(d) {
           d.date = d3.time.format("%Y-%m-%dT%H:%M:%S").parse(d.date);
@@ -32,7 +44,7 @@ var BarGraph = (function(d3, DataFetcher){
           .domain(data.map(function(d){ return d.month; }));
 
         var y = d3.scale.linear()
-          .range([height, 0])
+          .range([height, 25])
           .domain([0, d3.max(data, function(d) { return d.total; })]);
 
         var xAxis = d3.svg.axis()
@@ -57,9 +69,9 @@ var BarGraph = (function(d3, DataFetcher){
           .text(function(d) { return d.total; });
         tick.exit().remove();
 
-        var text = svg.selectAll("text").data(data);
-        text.enter().append("text");
-        text.transition().duration(500)
+        var barText = svg.selectAll("text.bar-text").data(data);
+        barText.enter().append("text");
+        barText.transition().duration(500)
           .attr("class", "bar-text")
           .text(function(d) { return d.total; })
           .attr("x", function(d, i){ return i * (width/data.length) + barWidth/2; })
@@ -68,7 +80,7 @@ var BarGraph = (function(d3, DataFetcher){
           .attr("text-anchor", "middle")
           .attr("font-size", "13px")
           .attr("fill", "white");
-        text.exit().remove();
+        barText.exit().remove();
 
         svg.append("g")
           .attr("class", "axis")

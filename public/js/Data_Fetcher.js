@@ -23,7 +23,6 @@ var DataFetcher = (function($, SoQLQueryMaker){
 
     getCrimeDataByDay: function(gameDate, callbackFn){
       var query = SoQLQueryMaker.dataByDate(gameDate);
-      console.log(query);
       $.getJSON(query, function(data, status){
         if (callbackFn){
           callbackFn(data);

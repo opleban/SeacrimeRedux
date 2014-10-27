@@ -1,12 +1,68 @@
+body{
+  font-family: helvetica, arial, sans-serif;
+}
+
+.clearfloat{
+  clear:both;
+}
+
+header{
+  background: #A5A7AF;
+  padding:10px;
+}
+
+.head-title{
+  float:left;
+  display:inline-block;
+  font-variant:bold;
+}
+
+.team-selectors{
+  display:inline-block;
+  float:right;
+  margin:1.5em 0;
+}
+
+.styled-select{
+  background: transparent;
+  width: 260px;
+  padding: 5px;
+  font-size: 16px;
+  line-height: 1;
+  border: 1px solid black;
+  border-radius: 0;
+  height: 30px;
+}
+
+.map-container{
+  margin-top:20px;
+}
+.container{
+  width:80%;
+  padding:20px;
+  margin:auto;
+}
+
 #map{
-  height:300px;
-  width:auto;
+  height:400px;
+  width:85%;
+  margin:auto;
+}
+
+.chart-header{
+  margin:auto;
+  background-color:#00163F;
+  color:#FFF;
+  margin-top:20px;
+  margin-bottom:20px;
 }
 
 #pie-chart, #bar-chart{
   display:inline-block;
   height:350px;
+  text-align:center;
 }
+
 
 .pie-tooltip {
   position: absolute;

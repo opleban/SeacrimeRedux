@@ -23,7 +23,8 @@ var AppView = (function($, _, DataFetcher, MapView, ChartView){
   function render(date){
     if ($('#map').length)
       MapView.renderCrimeData(date);
-    ChartView.renderHalfPieChart(date);
+    if (!($('#pie-chart svg').length))
+      ChartView.renderHalfPieChart(date);
   }
 
   return {
