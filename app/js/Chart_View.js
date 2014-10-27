@@ -1,77 +1,18 @@
-var ChartView = (function($, d3, DataFetcher){
+var ChartView = (function($, d3, DataFetcher, BarGraph){
 
   function getYear(dateString){
     return dateString.slice(0, 5);
   }
+  function drawBarGraph(eventGroup){
+    BarGraph.draw(eventGroup);
+  }
   return {
-    // renderBarGraph: function(eventGroup){
-    //   var margin = {top: 20, right: 20, bottom: 10, left: 20};
-    //   var width = 400 - margin.left - margin.right;
-    //   var height = 400 - margin.top - margin.bottom;
-    //   var barWidth = Math.floor(width / 12) - 1;
-
-    //   var svg = d3.select("#bar-chart").append("svg")
-    //         .attr("width", width + margin.left + margin.right)
-    //         .attr("height", height + margin.top + margin.bottom)
-    //       .append("g")
-    //         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    //   DataFetcher.getCrimeDataByEventGroup(eventGroup, function(data){
-    //     data.forEach(function(d) {
-    //       d.date = d3.time.format("%Y-%m-%dT%H:%M:%S").parse(d.date);
-    //       d.month = getMonthName(d.date.getMonth());
-    //       d.total = +d.total;
-    //     });
-
-    //     var x = d3.scale.ordinal()
-    //         .rangeRoundBands([0, width], 0, 0)
-    //         .domain(data.map(function(d){ return d.month; }));
-
-    //     var y = d3.scale.linear()
-    //         .range([height, 0])
-    //         .domain([0, d3.max(data, function(d) { return d.total; })]);
-
-    //     var xAxis = d3.svg.axis()
-    //         .scale(x)
-    //         .orient("bottom");
-
-    //     var yAxis = d3.svg.axis()
-    //         .scale(y)
-    //         .orient("left");
-
-    //     var bars = svg.selectAll("rect")
-    //                 .data(data)
-    //               .enter().append("rect")
-    //                 .style("fill", "#4EAE47" )
-    //                 .attr("class", "bar")
-    //                 .attr("width", barWidth)
-    //                 .attr("x", function(d){ return x(d.month); })
-    //                 .attr("y", function(d){ return y(d.total); })
-    //                 .attr("height", function(d){ return height - margin.top - margin.bottom - y(d.total); });
-    //     var barText = svg.selectAll("text")
-    //                 .data(data)
-    //               .enter().append("text")
-    //                 .attr("class", "bar-text")
-    //                 .text(function(d) { return d.total; })
-    //                 .attr("x", function(d, i){return i * (width/data.length) + barWidth/2;
-    //                 })
-    //                 .attr("y", function(d) { return y(d.total) - 3; })
-    //                 .attr("font-family", "sans-serif")
-    //                 .attr("text-anchor", "middle")
-    //                 .attr("font-size", "11px")
-    //                 .attr("fill", "steelblue");
-    //     svg.append("g")
-    //         .attr("class", "axis")
-    //         .attr('transform', 'translate(0, ' + (height - margin.top - margin.bottom) + ')')
-    //         .call(xAxis);
-    //   });
-    // },
 
     renderHalfPieChart: function(){
       var width = 600;
       var height = 350;
       var radius = (width/2) - 10;
-      var color = d3.scale.category20();
+      var color = d3.scale.category20c();
       var tooltip = d3.select("body").append('div')
           .attr('class', 'pie-tooltip')
           .style('opacity', 0);
@@ -121,8 +62,12 @@ var ChartView = (function($, d3, DataFetcher){
             tooltip.transition()
                   .duration(200)
                   .style('opacity', 0);
-          });
+          })
+
+          .on('click', function(d){
+            drawBarGraph(d.data.event_clearance_group);
+          })
       });
     }
   };
-}(jQuery, d3, DataFetcher));
+}(jQuery, d3, DataFetcher, BarGraph));

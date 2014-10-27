@@ -5,24 +5,27 @@ var BarGraph = (function(d3, DataFetcher){
     return MONTH_NAME[monthNumber];
   }
 
+  //Sets svg dimensions
   var margin = {top: 20, right: 20, bottom: 20, left: 20};
   var width = 400 - margin.left - margin.right;
   var height = 400 - margin.top - margin.bottom;
 
+  //appends svg element to bar-chart div
   var svg = d3.select("#bar-chart").append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom);
 
   return{
+    //draw function, creates the bar graph
+    //It is also called to update the bar graph
     draw: function(eventGroup){
-      console.log("in draw");
       DataFetcher.getCrimeDataByEventGroup(eventGroup, function(data){
         data.forEach( function(d) {
           d.date = d3.time.format("%Y-%m-%dT%H:%M:%S").parse(d.date);
           d.month = getMonthName(d.date.getMonth());
           d.total = +d.total;
         });
-
+        //Uses ordinal scale for each month of the year
         var barWidth = Math.floor(width / data.length) - 7;
         var x = d3.scale.ordinal()
           .rangeRoundBands([0, width], 0, 0)
@@ -74,62 +77,5 @@ var BarGraph = (function(d3, DataFetcher){
 
       });
     },
-
-    update: function(eventGroup){
-      console.log("in update");
-      DataFetcher.getCrimeDataByEventGroup(eventGroup, function(data){
-        data.forEach( function(d) {
-          d.date = d3.time.format("%Y-%m-%dT%H:%M:%S").parse(d.date);
-          d.month = getMonthName(d.date.getMonth());
-          d.total = +d.total;
-        });
-
-        x.domain(data.map(function(d){ return d.month; }));
-        y.domain([0, d3.max(data, function(d) { return d.total; })]);
-
-        xAxis = d3.svg.axis()
-          .scale(x)
-          .orient("bottom");
-
-        svg.select(".axis")
-          .transition()
-          .duration(1000)
-          .call(xAxis);
-
-        svg.selectAll("rect")
-          .data(data)
-          .exit()
-            .transition()
-            .remove();
-        svg.selectAll("rect")
-          .data(data)
-          .transition()
-          .duration(1000)
-          .attr("x", function(d){ return x(d.month); })
-          .attr("y", function(d){ return y(d.total); })
-          .attr("height", function(d){
-            return height - margin.top - margin.bottom - y(d.total);
-          })
-        svg.selectAll("text")
-          .data(data)
-          .exit()
-            .transition()
-            .remove();
-        svg.selectAll("text")
-          .data(data)
-          .transition()
-          .duration(1000)
-          .text(function(d) { return d.total; })
-          .attr("x", function(d, i){
-            return i * (width/data.length) + barWidth/2;
-          })
-          .attr("y", function(d) {
-            return y(d.total) - 3;
-          })
-      });
-    }
   };
 }(d3, DataFetcher));
-
-BarGraph.draw("CAR PROWL");
-// BarGraph.update("PROSTITUTION");
