@@ -3,9 +3,6 @@
   width:auto;
 }
 
-#charts{
-}
-
 #pie-chart, #bar-chart{
   display:inline-block;
   height:350px;
@@ -20,6 +17,14 @@
   pointer-events: none;
   color:steelblue;
   background-color: #FFF
+}
+
+#bar-chart rect{
+  fill: #4EAE47;
+}
+
+#bar-chart text.bar-text{
+  fill:white;
 }
 
 .axis path,
