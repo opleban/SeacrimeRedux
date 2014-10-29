@@ -1,7 +1,26 @@
-var AppView = (function($, _, DataFetcher, MapView, ChartView){
+var AppMediator = (function($, _, amplify, DataFetcher, MapView, PieChart, BarChart){
   var $yearSelection = $("select.year-selection");
   var $teamSelection = $("select.team-selection");
   var $displayDate = $('#date');
+
+  function publicInit(){
+    displayDataDate();
+    MapView.renderCrimeData();
+    PieChart.init();
+    listenForYearSelection();
+    listenForTeamSelection();
+    amplify.subscribe("pieClick", function(d){
+      BarChart.draw(d.data.event_clearance_group);
+      MapView.renderCrimeDataByEventGroup(d.data.event_clearance_group);
+    });
+  }
+
+  //Pie Chart always displays aggregate data for 2014, only the map re-renders
+  function render(date){
+    displayDataDate(date);
+    MapView.renderCrimeData(date);
+    PieChart.render(date);
+  }
 
   function formatGameDate(date){
     return date.slice(0,10);
@@ -35,22 +54,9 @@ var AppView = (function($, _, DataFetcher, MapView, ChartView){
     });
   }
 
-//Pie Chart always displays aggregate data for 2014, only the map re-renders
-  function render(date){
-    displayDataDate(date);
-    if ($('#map').length)
-      MapView.renderCrimeData(date);
-    if (!($('#pie-chart svg').length))
-      ChartView.renderHalfPieChart(date);
-  }
-
   return {
-    initialize: function(){
-      render();
-      listenForYearSelection();
-      listenForTeamSelection();
-    }
+    init: publicInit
   };
-}(jQuery, _, DataFetcher, MapView, ChartView));
+}(jQuery, _, amplify, DataFetcher, MapView, PieChart, BarChart));
 
-AppView.initialize();
+AppMediator.init();

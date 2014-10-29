@@ -1,4 +1,4 @@
-var BarGraph = (function(d3, DataFetcher){
+var BarChart = (function(d3, DataFetcher){
 
   function getMonthName(monthNumber){
     var MONTH_NAME = {0:"Jan",  1:"Feb" , 2:"Mar" , 3:"Apr", 4:"May", 5:"Jun" , 6:"Jul", 7:"Aug", 8:"Sept", 9:"Oct", 10:"Nov", 11:"Dec"};

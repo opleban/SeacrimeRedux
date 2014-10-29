@@ -1,1 +1,3 @@
-// AppView.initialize();
+var SeaCrimeApp = (function(AppView){
+
+}(AppView));
