@@ -95,6 +95,7 @@ var DataFetcher = (function($, SoQLQueryMaker){
 
     getAggregateCrimeDataByDateAndEventGroup: function(dateString, eventGroup, callbackFn){
       var query = SoQLQueryMaker.aggregateCrimeDataByDateAndEventGroup(dateString, eventGroup);
+      $.getJSON(query, function(data, status){
       if (callbackFn){
           callbackFn(data);
         } else{ console.log("No callback provided"); }
