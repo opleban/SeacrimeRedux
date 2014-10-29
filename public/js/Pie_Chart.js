@@ -5,12 +5,29 @@ var PieChart = (function(d3, DataFetcher){
     renderAggregateCrimeData();
   }
 
+  function formatGameDate(date){
+    return date.slice(0,10);
+  }
+
   function publicRender(date){
     if (date){
       renderAggregateCrimeDataByDate(date);
     } else {
       renderAggregateCrimeData();
     }
+  }
+
+  function displayNumberOfCrimesAndDate(number, date){
+    if (date){
+      var formattedDate = formatGameDate(date);
+    } else {
+      formattedDate = "2014";
+    }
+
+    var $crimeTotal = $("#crime-total");
+    var totalCrimeTemplate =  _.template($("#crime-total-template").html())({number:number, date: formattedDate});
+    $crimeTotal.empty();
+    $crimeTotal.append(totalCrimeTemplate);
   }
 
   function renderAggregateCrimeData(){
@@ -20,6 +37,7 @@ var PieChart = (function(d3, DataFetcher){
         crime.total = +crime.total;
         totalCrimeFigure += crime.total;
       });
+      displayNumberOfCrimesAndDate(totalCrimeFigure);
       drawPie(data);
     });
   }
@@ -31,6 +49,7 @@ var PieChart = (function(d3, DataFetcher){
         crime.total = +crime.total;
         totalCrimeFigure += crime.total;
       });
+      displayNumberOfCrimesAndDate(totalCrimeFigure, date);
       drawPie(data);
     });
   }
@@ -59,7 +78,6 @@ var PieChart = (function(d3, DataFetcher){
       .attr("height", height)
       .append("g")
       .attr("transform", "translate(" + width / 2 + "," + width/2 + ")" + "rotate(" + 270 +")");
-    console.log("calculating arc");
     var arcGroup = svg.selectAll(".arc").data(pie(data));
         arcGroup.enter().append("g")
             .attr("class", "arc")
@@ -69,7 +87,6 @@ var PieChart = (function(d3, DataFetcher){
         arcPath.transition().duration(500)
             .attr("d", arcRadius)
             .style("fill", function(d){ return color(d.data.event_clearance_group); });
-        console.log(arcPath);
         arcPath.exit().remove();
     arcPath.on('mouseover', function(d, i){
       d3.select(this).transition()
@@ -88,7 +105,10 @@ var PieChart = (function(d3, DataFetcher){
           .duration(200)
           .style('opacity', 0);
       })
-      .on('click', function(d){
+     .on('click', function(d){
+        svg.selectAll(".selected").classed("selected", false);
+        d3.select(this).attr("class", "selected");
+        this.parentNode.appendChild(this);
         amplify.publish("pieClick", {data:d.data});
       });
   }

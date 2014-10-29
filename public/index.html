@@ -55,7 +55,7 @@
       <div class="chart-header">
         <div class="container">
           <h2>2014 Crime Overview</h2>
-          <p> The pie chart below displays a breakdown of crime within a mile of CenturyLink Stadium in 2014 by type of crime. For further details, click on any pie slice to view a chart displaying the number of incidences that occurred during each month for each type. Scroll up, as well, to see the data displayed on the map. </p>
+          <p> The pie chart below displays a breakdown of crime within a mile of CenturyLink Stadium for the date selected by type of crime. Click on any pie slice to view a month by month break down each type of crime in 2014. Scroll up, as well, to see the data displayed on the map. </p>
         </div>
       </div>
 
@@ -81,12 +81,12 @@ See App_View.js-->
 See Chart_View.js-->
     <script id="crime-total-template" type="text/template">
       <h3>Total number of reported crimes: <%= number %></h3>
+      <h3>(<%= date%>)</h3>
     </script>
 
     <script src="js/SoQL_Query_Maker.js"></script>
     <script src="js/Data_Fetcher.js"></script>
     <script src="js/Map_View.js"></script>
-    <script src="js/Chart_View.js"></script>
     <script src="js/Pie_Chart.js"></script>
     <script src="js/Bar_Chart.js"></script>
     <script src="js/App_View.js"></script>
