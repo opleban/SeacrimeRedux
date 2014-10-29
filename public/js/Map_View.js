@@ -7,7 +7,7 @@ var MapView = (function($, _, L, DataFetcher){
   function createMap(){
     if ($('#map').length)
       return L.map("map", {center:CENTURYLINK_COORDINATES, zoom:14, scrollWheelZoom:false})
-                  .addLayer(new L.TileLayer(MAPBOX_URL));
+              .addLayer(new L.TileLayer(MAPBOX_URL));
   }
 
   function renderCrimeDataOnMap(data){
