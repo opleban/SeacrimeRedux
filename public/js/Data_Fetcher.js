@@ -91,6 +91,17 @@ var DataFetcher = (function($, SoQLQueryMaker){
         .fail(function(e){
           console.log("Error fetching data!");
         });
+    },
+
+    getAggregateCrimeDataByDateAndEventGroup: function(dateString, eventGroup, callbackFn){
+      var query = SoQLQueryMaker.aggregateCrimeDataByDateAndEventGroup(dateString, eventGroup);
+      if (callbackFn){
+          callbackFn(data);
+        } else{ console.log("No callback provided"); }
+      })
+        .fail(function(e){
+          console.log("Error fetching data!");
+        });
     }
   };
 }(jQuery, SoQLQueryMaker));

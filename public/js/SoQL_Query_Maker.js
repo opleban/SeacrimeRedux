@@ -83,6 +83,18 @@ var SoQLQueryMaker = (function(){
                                     + timeRange(dateString).end + "')";
       var groupStatement = "$group=event_clearance_group";
       return [URL_BASE, selectStatement, whereStatement, groupStatement].join("&");
+    },
+
+    aggregateCrimeDataByDateAndEventGroup:function(dateString, eventGroup){
+      var selectStatement = "$select=event_clearance_group, incident_location, at_scene_time, hundred_block_location, event_clearance_description AS description";
+      var whereStatement = "$where=" + WITHIN_A_MILE_OF_CENTURY_LINK + " AND "
+                                    + INCLUDES_DATE_AND_TYPE
+                                    + " AND (at_scene_time >= '"
+                                    + timeRange(dateString).start
+                                    + "' AND at_scene_time <= '"
+                                    + timeRange(dateString).end + "')"
+                                    + " AND event_clearance_group = '" + eventGroup
+      return [URL_BASE, selectStatement, whereStatement].join("&");
     }
   };
 }());
