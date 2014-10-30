@@ -31,16 +31,16 @@ var MapView = (function($, _, L, DataFetcher){
   }
 
   return {
-    renderCrimeDataByEventGroup: function(eventGroup){
-      DataFetcher.getCrimeDataByEventGroup(eventGroup, renderCrimeDataOnMap);
+    renderCrimeDataByEventGroup: function(eventGroup, date){
+        DataFetcher.getCrimeData({eventGroup:eventGroup, date:date}, renderCrimeDataOnMap);
     },
 
     renderCrimeData: function(date){
       // if no date is provided, then map will display most recent crime data. If a date is provided, then map will display only crime data from that date.
       if (date){
-        DataFetcher.getCrimeDataByDay(date, renderCrimeDataOnMap);
+        DataFetcher.getCrimeData({date:date}, renderCrimeDataOnMap);
       } else {
-        DataFetcher.getAllCrimeData(renderCrimeDataOnMap);
+        DataFetcher.getCrimeData({}, renderCrimeDataOnMap);
       }
     },
   };

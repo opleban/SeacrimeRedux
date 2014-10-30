@@ -31,7 +31,7 @@ var PieChart = (function(d3, DataFetcher){
   }
 
   function renderAggregateCrimeData(){
-    DataFetcher.getAggregateCrimeData(function(data){
+    DataFetcher.getAggregateCrimeData({}, function(data){
       var totalCrimeFigure = 0;
       data.forEach(function(crime){
         crime.total = +crime.total;
@@ -43,7 +43,7 @@ var PieChart = (function(d3, DataFetcher){
   }
 
   function renderAggregateCrimeDataByDate(date){
-    DataFetcher.getAggregateCrimeDataByDate(date, function(data){
+    DataFetcher.getAggregateCrimeData({date:date}, function(data){
       var totalCrimeFigure = 0;
       data.forEach(function(crime){
         crime.total = +crime.total;

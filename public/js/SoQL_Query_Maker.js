@@ -18,7 +18,14 @@ var SoQLQueryMaker = (function(){
   }
 
   function makeDateWhereStatement(dateString){
+    return "(at_scene_time >= '"
+          + timeRange(dateString).start
+          + "' AND at_scene_time <= '"
+          + timeRange(dateString).end + "')";
+  }
 
+  function makeEventGroupWhereStatement(eventGroup){
+    return "event_clearance_group = '" + eventGroup + "'";
   }
 
   return {
@@ -32,60 +39,41 @@ var SoQLQueryMaker = (function(){
       if (!options){
         return [URL_BASE, selectStatement, whereStatement, orderStatement].join("&");
       }
-      if (options.date){
+      if (options.date !== '2014' && options.date){
+        console.log(options.date)
         where.push(makeDateWhereStatement(options.date));
+      } else {
+        where.push("(at_scene_time >= '" + timeRange(CUT_OFF_DATE).start + "')");
       }
       if (options.eventGroup){
         where.push(makeEventGroupWhereStatement(options.eventGroup));
       }
-      whereStatement += " and " + options.join("&");
+      whereStatement += " AND " + where.join(" AND ");
       return [URL_BASE, selectStatement, whereStatement, orderStatement].join("&");
     },
 
     aggregateCrimeData: function(options){
       var selectStatement = "$select=event_clearance_group, count(*) AS total";
-      var whereStatement = "$where=" + WITHIN_A_MILE_OF_CENTURY_LINK + " AND "
-        + INCLUDES_DATE_AND_TYPE + " AND "
-        + "(at_scene_time >= '"
-        + timeRange(CUT_OFF_DATE).start + "')";
+      var whereStatement = "$where=" + WITHIN_A_MILE_OF_CENTURY_LINK
+                            + " AND " + INCLUDES_DATE_AND_TYPE;
       var groupStatement = "$group=event_clearance_group";
+      var where = [];
+      if (!options){
+        return [URL_BASE, selectStatement, whereStatement, groupStatement].join("&");
+      }
+      if (options.date){
+        where.push(makeDateWhereStatement(options.date));
+      } else {
+        where.push("(at_scene_time >= '" + timeRange(CUT_OFF_DATE).start + "')");
+      }
+      if (options.eventGroup){
+        where.push(makeEventGroupWhereStatement(options.eventGroup));
+      }
+      whereStatement += " AND " + where.join(" AND ");
       return [URL_BASE, selectStatement, whereStatement, groupStatement].join("&");
     },
 
-    allCrimeData: function(){
-      var selectStatement = "$select=event_clearance_group, incident_location, at_scene_time, hundred_block_location, event_clearance_description AS description";
-      var whereStatement = "$where="
-                          + INCLUDES_DATE_AND_TYPE + " AND "
-                          + WITHIN_A_MILE_OF_CENTURY_LINK ;
-      var orderStatement = "$order=at_scene_time DESC";
-      return [URL_BASE, selectStatement, whereStatement, orderStatement].join("&");
-    },
-
-    dataByDate:function(dateString){
-      var selectStatement = "$select=event_clearance_group, incident_location, at_scene_time, event_clearance_description AS description, hundred_block_location";
-      var whereStatement = "$where="
-                        + WITHIN_A_MILE_OF_CENTURY_LINK + " AND "
-                        + INCLUDES_DATE_AND_TYPE
-                        + " AND (at_scene_time >= '"
-                        + timeRange(dateString).start
-                        + "' AND at_scene_time <= '"
-                        + timeRange(dateString).end + "')";
-      var orderStatement = "$order=at_scene_time DESC";
-      return [URL_BASE, selectStatement, whereStatement, orderStatement].join("&");
-    },
-
-    crimeDataByEventGroup: function(eventGroup){
-      var selectStatement = "$select=event_clearance_group, incident_location, at_scene_time, hundred_block_location, event_clearance_description AS description";
-      var whereStatement = "$where= "
-                        + WITHIN_A_MILE_OF_CENTURY_LINK
-                        + " AND event_clearance_group = '" + eventGroup
-                        + "' AND at_scene_time >= '"
-                        + timeRange(CUT_OFF_DATE).start + "'";
-      var orderStatement = "$order=at_scene_time DESC";
-      return [URL_BASE, selectStatement, whereStatement, orderStatement,].join("&");
-    },
-
-    aggregateCrimeDataByEventGroup: function(eventGroup){
+    aggregateMonthlyCrimeDataByEventGroup: function(eventGroup){
       var selectStatement = "$select=date_trunc_ym(at_scene_time) AS date, count(*) AS total";
       var whereStatement = "$where= "
                         + WITHIN_A_MILE_OF_CENTURY_LINK
@@ -95,30 +83,63 @@ var SoQLQueryMaker = (function(){
       var orderStatement = "$order=date ASC";
       var groupStatement = "$group=date";
       return [URL_BASE, selectStatement, whereStatement, orderStatement, groupStatement].join("&");
-    },
-
-    aggregateCrimeDataByDate:function(dateString){
-      var selectStatement = "$select=event_clearance_group, count(*) AS total";
-      var whereStatement = "$where=" + WITHIN_A_MILE_OF_CENTURY_LINK + " AND "
-                                    + INCLUDES_DATE_AND_TYPE
-                                    + " AND (at_scene_time >= '"
-                                    + timeRange(dateString).start
-                                    + "' AND at_scene_time <= '"
-                                    + timeRange(dateString).end + "')";
-      var groupStatement = "$group=event_clearance_group";
-      return [URL_BASE, selectStatement, whereStatement, groupStatement].join("&");
-    },
-
-    aggregateCrimeDataByDateAndEventGroup:function(dateString, eventGroup){
-      var selectStatement = "$select=event_clearance_group, incident_location, at_scene_time, hundred_block_location, event_clearance_description AS description";
-      var whereStatement = "$where=" + WITHIN_A_MILE_OF_CENTURY_LINK + " AND "
-                                    + INCLUDES_DATE_AND_TYPE
-                                    + " AND (at_scene_time >= '"
-                                    + timeRange(dateString).start
-                                    + "' AND at_scene_time <= '"
-                                    + timeRange(dateString).end + "')"
-                                    + " AND event_clearance_group = '" + eventGroup
-      return [URL_BASE, selectStatement, whereStatement].join("&");
     }
+
+    // allCrimeData: function(){
+    //   var selectStatement = "$select=event_clearance_group, incident_location, at_scene_time, hundred_block_location, event_clearance_description AS description";
+    //   var whereStatement = "$where="
+    //                       + INCLUDES_DATE_AND_TYPE + " AND "
+    //                       + WITHIN_A_MILE_OF_CENTURY_LINK ;
+    //   var orderStatement = "$order=at_scene_time DESC";
+    //   return [URL_BASE, selectStatement, whereStatement, orderStatement].join("&");
+    // },
+
+    // dataByDate:function(dateString){
+    //   var selectStatement = "$select=event_clearance_group, incident_location, at_scene_time, event_clearance_description AS description, hundred_block_location";
+    //   var whereStatement = "$where="
+    //                     + WITHIN_A_MILE_OF_CENTURY_LINK + " AND "
+    //                     + INCLUDES_DATE_AND_TYPE
+    //                     + " AND (at_scene_time >= '"
+    //                     + timeRange(dateString).start
+    //                     + "' AND at_scene_time <= '"
+    //                     + timeRange(dateString).end + "')";
+    //   var orderStatement = "$order=at_scene_time DESC";
+    //   return [URL_BASE, selectStatement, whereStatement, orderStatement].join("&");
+    // },
+
+    // crimeDataByEventGroup: function(eventGroup){
+    //   var selectStatement = "$select=event_clearance_group, incident_location, at_scene_time, hundred_block_location, event_clearance_description AS description";
+    //   var whereStatement = "$where= "
+    //                     + WITHIN_A_MILE_OF_CENTURY_LINK
+    //                     + " AND event_clearance_group = '" + eventGroup
+    //                     + "' AND at_scene_time >= '"
+    //                     + timeRange(CUT_OFF_DATE).start + "'";
+    //   var orderStatement = "$order=at_scene_time DESC";
+    //   return [URL_BASE, selectStatement, whereStatement, orderStatement,].join("&");
+    // },
+
+    // aggregateCrimeDataByDate:function(dateString){
+    //   var selectStatement = "$select=event_clearance_group, count(*) AS total";
+    //   var whereStatement = "$where=" + WITHIN_A_MILE_OF_CENTURY_LINK + " AND "
+    //                                 + INCLUDES_DATE_AND_TYPE
+    //                                 + " AND (at_scene_time >= '"
+    //                                 + timeRange(dateString).start
+    //                                 + "' AND at_scene_time <= '"
+    //                                 + timeRange(dateString).end + "')";
+    //   var groupStatement = "$group=event_clearance_group";
+    //   return [URL_BASE, selectStatement, whereStatement, groupStatement].join("&");
+    // },
+
+    // aggregateCrimeDataByDateAndEventGroup:function(dateString, eventGroup){
+    //   var selectStatement = "$select=event_clearance_group, incident_location, at_scene_time, hundred_block_location, event_clearance_description AS description";
+    //   var whereStatement = "$where=" + WITHIN_A_MILE_OF_CENTURY_LINK + " AND "
+    //                                 + INCLUDES_DATE_AND_TYPE
+    //                                 + " AND (at_scene_time >= '"
+    //                                 + timeRange(dateString).start
+    //                                 + "' AND at_scene_time <= '"
+    //                                 + timeRange(dateString).end + "')"
+    //                                 + " AND event_clearance_group = '" + eventGroup
+    //   return [URL_BASE, selectStatement, whereStatement].join("&");
+    // }
   };
 }());

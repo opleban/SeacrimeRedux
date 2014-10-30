@@ -31,7 +31,7 @@ var BarChart = (function(d3, DataFetcher){
         .attr("x", width/2)
         .attr("y", 15);
 
-      DataFetcher.getAggregateCrimeDataByEventGroup(eventGroup, function(data){
+      DataFetcher.getAggregateMonthlyCrimeDataByEventGroup(eventGroup, function(data){
         data.forEach( function(d) {
           d.date = d3.time.format("%Y-%m-%dT%H:%M:%S").parse(d.date);
           d.month = getMonthName(d.date.getMonth());

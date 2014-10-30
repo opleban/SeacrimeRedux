@@ -45,56 +45,44 @@ var DataFetcher = (function($, SoQLQueryMaker){
         });
     },
 
-    getCrimeDataByDay: function(gameDate, callbackFn){
-      var query = SoQLQueryMaker.dataByDate(gameDate);
-      $.getJSON(query, function(data, status){
-        if (callbackFn){
-          callbackFn(data);
-        } else { console.log("No callback provided"); }
-      })
-        .fail(function(e){
-          console.log("Error fetching data!");
-        });
-    },
+    // getCrimeDataByDay: function(gameDate, callbackFn){
+    //   var query = SoQLQueryMaker.dataByDate(gameDate);
+    //   $.getJSON(query, function(data, status){
+    //     if (callbackFn){
+    //       callbackFn(data);
+    //     } else { console.log("No callback provided"); }
+    //   })
+    //     .fail(function(e){
+    //       console.log("Error fetching data!");
+    //     });
+    // },
 
-    getAllCrimeData: function(callbackFn){
-      var query = SoQLQueryMaker.allCrimeData();
-      $.getJSON(query, function(data, status){
-        if (callbackFn){
-          callbackFn(data);
-        } else { console.log("No callback provided"); }
-      })
-        .fail(function(e){
-          console.log("Error fetching data!");
-        });
-    },
+    // getAllCrimeData: function(callbackFn){
+    //   var query = SoQLQueryMaker.allCrimeData();
+    //   $.getJSON(query, function(data, status){
+    //     if (callbackFn){
+    //       callbackFn(data);
+    //     } else { console.log("No callback provided"); }
+    //   })
+    //     .fail(function(e){
+    //       console.log("Error fetching data!");
+    //     });
+    // },
 
-    getCrimeDataByEventGroup: function(eventGroup, callbackFn){
-      var query = SoQLQueryMaker.crimeDataByEventGroup(eventGroup);
-      $.getJSON(query, function(data, status){
-        if (callbackFn){
-          callbackFn(data);
-        } else{ console.log("No callback provided"); }
-      })
-        .fail(function(e){
-          console.log("Error fetching data!");
-        });
-    },
+    // getCrimeDataByEventGroup: function(eventGroup, callbackFn){
+    //   var query = SoQLQueryMaker.crimeDataByEventGroup(eventGroup);
+    //   $.getJSON(query, function(data, status){
+    //     if (callbackFn){
+    //       callbackFn(data);
+    //     } else{ console.log("No callback provided"); }
+    //   })
+    //     .fail(function(e){
+    //       console.log("Error fetching data!");
+    //     });
+    // },
 
-    getAggregateCrimeData: function(callbackFn){
-      var query = SoQLQueryMaker.aggregateCrimeData();
-      $.getJSON(query, function(data, status){
-        if (callbackFn){
-          callbackFn(data);
-        } else { console.log("No callback provided"); }
-      })
-        .fail(function(e){
-          console.log("Error fetching data!");
-        });
-    },
-
-    getAggregateCrimeDataByEventGroup: function(eventGroup, callbackFn){
-      var query = SoQLQueryMaker.aggregateCrimeDataByEventGroup(eventGroup);
+    getAggregateMonthlyCrimeDataByEventGroup: function(eventGroup, callbackFn){
+      var query = SoQLQueryMaker.aggregateMonthlyCrimeDataByEventGroup(eventGroup);
       $.getJSON(query, function(data, status){
         if (callbackFn){
           callbackFn(data);
@@ -105,28 +93,28 @@ var DataFetcher = (function($, SoQLQueryMaker){
         });
     },
 
-    getAggregateCrimeDataByDate: function(dateString, callbackFn){
-      var query = SoQLQueryMaker.aggregateCrimeDataByDate(dateString);
-      $.getJSON(query, function(data, status){
-        if (callbackFn){
-          callbackFn(data);
-        } else{ console.log("No callback provided"); }
-      })
-        .fail(function(e){
-          console.log("Error fetching data!");
-        });
-    },
+    // getAggregateCrimeDataByDate: function(dateString, callbackFn){
+    //   var query = SoQLQueryMaker.aggregateCrimeDataByDate(dateString);
+    //   $.getJSON(query, function(data, status){
+    //     if (callbackFn){
+    //       callbackFn(data);
+    //     } else{ console.log("No callback provided"); }
+    //   })
+    //     .fail(function(e){
+    //       console.log("Error fetching data!");
+    //     });
+    // },
 
-    getAggregateCrimeDataByDateAndEventGroup: function(dateString, eventGroup, callbackFn){
-      var query = SoQLQueryMaker.aggregateCrimeDataByDateAndEventGroup(dateString, eventGroup);
-      $.getJSON(query, function(data, status){
-        if (callbackFn){
-            callbackFn(data);
-        } else{ console.log("No callback provided"); }
-      })
-      .fail(function(e){
-        console.log("Error fetching data!");
-      });
-    }
+    // getAggregateCrimeDataByDateAndEventGroup: function(dateString, eventGroup, callbackFn){
+    //   var query = SoQLQueryMaker.aggregateCrimeDataByDateAndEventGroup(dateString, eventGroup);
+    //   $.getJSON(query, function(data, status){
+    //     if (callbackFn){
+    //         callbackFn(data);
+    //     } else{ console.log("No callback provided"); }
+    //   })
+    //   .fail(function(e){
+    //     console.log("Error fetching data!");
+    //   });
+    // }
   };
 }(jQuery, SoQLQueryMaker));
