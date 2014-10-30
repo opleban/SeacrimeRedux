@@ -33,10 +33,10 @@ var SoQLQueryMaker = (function(){
         return [URL_BASE, selectStatement, whereStatement, orderStatement].join("&");
       }
       if (options.date){
-        where.push(makeDateWhereStatement(options.date);
+        where.push(makeDateWhereStatement(options.date));
       }
       if (options.eventGroup){
-        where.push(makeEventGroupWhereStatement(options.eventGroup);
+        where.push(makeEventGroupWhereStatement(options.eventGroup));
       }
       whereStatement += " and " + options.join("&");
       return [URL_BASE, selectStatement, whereStatement, orderStatement].join("&");
@@ -49,6 +49,7 @@ var SoQLQueryMaker = (function(){
         + "(at_scene_time >= '"
         + timeRange(CUT_OFF_DATE).start + "')";
       var groupStatement = "$group=event_clearance_group";
+      return [URL_BASE, selectStatement, whereStatement, groupStatement].join("&");
     },
 
     allCrimeData: function(){

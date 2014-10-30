@@ -123,7 +123,10 @@ var DataFetcher = (function($, SoQLQueryMaker){
         if (callbackFn){
             callbackFn(data);
         } else{ console.log("No callback provided"); }
-        .fail(function(e){ console.log("Error fetching data!"); });
+      })
+      .fail(function(e){
+        console.log("Error fetching data!");
       });
-    };
+    }
+  };
 }(jQuery, SoQLQueryMaker));
