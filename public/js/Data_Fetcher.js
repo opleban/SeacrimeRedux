@@ -96,13 +96,10 @@ var DataFetcher = (function($, SoQLQueryMaker){
     getAggregateCrimeDataByDateAndEventGroup: function(dateString, eventGroup, callbackFn){
       var query = SoQLQueryMaker.aggregateCrimeDataByDateAndEventGroup(dateString, eventGroup);
       $.getJSON(query, function(data, status){
-      if (callbackFn){
-          callbackFn(data);
+        if (callbackFn){
+            callbackFn(data);
         } else{ console.log("No callback provided"); }
-      })
-        .fail(function(e){
-          console.log("Error fetching data!");
-        });
-    }
-  };
+        .fail(function(e){ console.log("Error fetching data!"); });
+      });
+    };
 }(jQuery, SoQLQueryMaker));
