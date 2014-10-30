@@ -21,6 +21,30 @@ var DataFetcher = (function($, SoQLQueryMaker){
       });
     },
 
+    getCrimeData: function(options, callbackFn){
+      var query = SoQLQueryMaker.crimeData(options);
+      $.getJSON(query, function(data, status){
+        if (callbackFn){
+          callbackFn(data);
+        } else { console.log("No callback provided"); }
+      })
+        .fail(function(e){
+          console.log("Error fetching data!");
+        });
+    },
+
+    getAggregateCrimeData: function(options, callbackFn){
+      var query = SoQLQueryMaker.aggregateCrimeData(options);
+      $.getJSON(query, function(data, status){
+        if (callbackFn){
+          callbackFn(data);
+        } else { console.log("No callback provided"); }
+      })
+        .fail(function(e){
+          console.log("Error fetching data!");
+        });
+    },
+
     getCrimeDataByDay: function(gameDate, callbackFn){
       var query = SoQLQueryMaker.dataByDate(gameDate);
       $.getJSON(query, function(data, status){
@@ -45,24 +69,24 @@ var DataFetcher = (function($, SoQLQueryMaker){
         });
     },
 
-    getAggregateCrimeData: function(callbackFn){
-      var query = SoQLQueryMaker.aggregateCrimeData();
-      $.getJSON(query, function(data, status){
-        if (callbackFn){
-          callbackFn(data);
-        } else { console.log("No callback provided"); }
-      })
-        .fail(function(e){
-          console.log("Error fetching data!");
-        });
-    },
-
     getCrimeDataByEventGroup: function(eventGroup, callbackFn){
       var query = SoQLQueryMaker.crimeDataByEventGroup(eventGroup);
       $.getJSON(query, function(data, status){
         if (callbackFn){
           callbackFn(data);
         } else{ console.log("No callback provided"); }
+      })
+        .fail(function(e){
+          console.log("Error fetching data!");
+        });
+    },
+
+    getAggregateCrimeData: function(callbackFn){
+      var query = SoQLQueryMaker.aggregateCrimeData();
+      $.getJSON(query, function(data, status){
+        if (callbackFn){
+          callbackFn(data);
+        } else { console.log("No callback provided"); }
       })
         .fail(function(e){
           console.log("Error fetching data!");

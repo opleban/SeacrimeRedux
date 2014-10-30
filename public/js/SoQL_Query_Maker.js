@@ -15,9 +15,42 @@ var SoQLQueryMaker = (function(){
       start: baseString + 'T00:00:00',
       end: baseString + 'T23:59:59'
     };
-  };
+  }
+
+  function makeDateWhereStatement(dateString){
+
+  }
 
   return {
+    crimeData: function(options){
+      var selectStatement = "$select=event_clearance_group, incident_location, at_scene_time, hundred_block_location, event_clearance_description AS description";
+      var whereStatement = "$where="
+                          + INCLUDES_DATE_AND_TYPE + " AND "
+                          + WITHIN_A_MILE_OF_CENTURY_LINK ;
+      var orderStatement = "$order=at_scene_time DESC";
+      var where = [];
+      if (!options){
+        return [URL_BASE, selectStatement, whereStatement, orderStatement].join("&");
+      }
+      if (options.date){
+        where.push(makeDateWhereStatement(options.date);
+      }
+      if (options.eventGroup){
+        where.push(makeEventGroupWhereStatement(options.eventGroup);
+      }
+      whereStatement += " and " + options.join("&");
+      return [URL_BASE, selectStatement, whereStatement, orderStatement].join("&");
+    },
+
+    aggregateCrimeData: function(options){
+      var selectStatement = "$select=event_clearance_group, count(*) AS total";
+      var whereStatement = "$where=" + WITHIN_A_MILE_OF_CENTURY_LINK + " AND "
+        + INCLUDES_DATE_AND_TYPE + " AND "
+        + "(at_scene_time >= '"
+        + timeRange(CUT_OFF_DATE).start + "')";
+      var groupStatement = "$group=event_clearance_group";
+    },
+
     allCrimeData: function(){
       var selectStatement = "$select=event_clearance_group, incident_location, at_scene_time, hundred_block_location, event_clearance_description AS description";
       var whereStatement = "$where="
@@ -25,16 +58,6 @@ var SoQLQueryMaker = (function(){
                           + WITHIN_A_MILE_OF_CENTURY_LINK ;
       var orderStatement = "$order=at_scene_time DESC";
       return [URL_BASE, selectStatement, whereStatement, orderStatement].join("&");
-    },
-
-    aggregateCrimeData:function(){
-      var selectStatement = "$select=event_clearance_group, count(*) AS total";
-      var whereStatement = "$where=" + WITHIN_A_MILE_OF_CENTURY_LINK + " AND "
-        + INCLUDES_DATE_AND_TYPE + " AND "
-        + "(at_scene_time >= '"
-        + timeRange(CUT_OFF_DATE).start + "')";
-      var groupStatement = "$group=event_clearance_group";
-      return [URL_BASE, selectStatement, whereStatement, groupStatement].join("&");
     },
 
     dataByDate:function(dateString){
