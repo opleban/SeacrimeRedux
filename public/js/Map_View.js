@@ -1,3 +1,9 @@
+// Make it more OO, turn it into a constructor function
+// use require JS
+// have top-level module called main js, and the main js would make reference to all of my module
+// Jasmine tests, tests the constructor function and its property, any methods
+// check that the dom elements are the right side and color
+// check that the colors are right
 var MapView = (function($, _, L, DataFetcher){
   var MAPBOX_URL = "http://{s}.tiles.mapbox.com/v3/opleban.j9f7bfle/{z}/{x}/{y}.png";
   var CENTURYLINK_COORDINATES = [47.595372, -122.331363];

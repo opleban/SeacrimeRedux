@@ -1,3 +1,4 @@
+//Bar Chart as a constructor and instantiate a new bar chart
 var BarChart = (function(d3, DataFetcher){
 
   function getMonthName(monthNumber){
