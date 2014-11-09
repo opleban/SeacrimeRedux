@@ -5,13 +5,20 @@ var AppMediator = (function($, _, amplify, DataFetcher, MapView, PieChart, BarCh
   var currentCrimeDate= "2014";
 
   function publicInit(){
+    var barChart = new BarChart.Chart({
+        margin: {top: 20, right: 20, bottom: 10, left: 20},
+        width: 400,
+        height: 400,
+        el: '#bar-chart'
+    });
+
     displayDataDate();
     MapView.renderCrimeData();
     PieChart.init();
     listenForYearSelection();
     listenForTeamSelection();
     amplify.subscribe("pieClick", function(d){
-      BarChart.draw(d.data.event_clearance_group);
+      barChart.drawMonthly(d.data.event_clearance_group);
       MapView.renderCrimeDataByEventGroup(d.data.event_clearance_group, currentCrimeDate);
     });
   }
