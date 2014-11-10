@@ -2,26 +2,20 @@
 // more OO
 var PieChart = (function(d3, DataFetcher){
 
-  var Pie = function(){
-
-  }
   var width, height, radius, pie, color, arcRadius, tooltip, svg, arcGroup;
 
-  function publicInit(){
-    renderAggregateCrimeData();
-  }
 
   function formatGameDate(date){
     return date.slice(0,10);
   }
 
-  function publicRender(date){
-    if (date){
-      renderAggregateCrimeDataByDate(date);
-    } else {
-      renderAggregateCrimeData();
-    }
-  }
+  // function publicRender(date){
+  //   if (date){
+  //     renderAggregateCrimeDataByDate(date);
+  //   } else {
+  //     renderAggregateCrimeData();
+  //   }
+  // }
 
   function displayNumberOfCrimesAndDate(number, date){
     if (date){
@@ -36,31 +30,7 @@ var PieChart = (function(d3, DataFetcher){
     $crimeTotal.append(totalCrimeTemplate);
   }
 
-  function renderAggregateCrimeData(){
-    DataFetcher.getAggregateCrimeData({}, function(data){
-      var totalCrimeFigure = 0;
-      data.forEach(function(crime){
-        crime.total = +crime.total;
-        totalCrimeFigure += crime.total;
-      });
-      displayNumberOfCrimesAndDate(totalCrimeFigure);
-      drawPie(data);
-    });
-  }
-
-  function renderAggregateCrimeDataByDate(date){
-    DataFetcher.getAggregateCrimeData({date:date}, function(data){
-      var totalCrimeFigure = 0;
-      data.forEach(function(crime){
-        crime.total = +crime.total;
-        totalCrimeFigure += crime.total;
-      });
-      displayNumberOfCrimesAndDate(totalCrimeFigure, date);
-      drawPie(data);
-    });
-  }
-
-  function drawPie(data){
+  function draw(data){
     width = width || 600;
     height = height || 350;
     radius = radius || (width/2) - 10;
@@ -120,8 +90,7 @@ var PieChart = (function(d3, DataFetcher){
   }
 
   return {
-    init:publicInit,
-    render:publicRender
-  }
+    draw: draw
+  };
 
 }(d3, DataFetcher));

@@ -42,7 +42,12 @@ var DataFetcher = (function($, SoQLQueryMaker){
       var query = SoQLQueryMaker.aggregateCrimeData(options);
       $.getJSON(query, function(data, status){
         if (callbackFn){
-          callbackFn(data);
+          var totalCrimeFigure = 0;
+          data.forEach(function(crime){
+            crime.total = +crime.total;
+            totalCrimeFigure += crime.total;
+          });
+          callbackFn(data, totalCrimeFigure);
         } else { console.log("No callback provided"); }
       })
         .fail(function(e){

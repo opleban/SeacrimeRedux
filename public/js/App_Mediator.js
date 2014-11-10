@@ -18,7 +18,9 @@ var AppMediator = (function($, _, amplify, DataFetcher, MapView, PieChart, BarCh
     DataFetcher.getCrimeData({}, function(data){
       crimeMap.renderCrimeData(data);
     });
-    PieChart.init();
+    DataFetcher.getAggregateCrimeData({}, function(data){
+      PieChart.draw(data);
+    });
     listenForYearSelection();
     listenForTeamSelection();
 
@@ -38,7 +40,9 @@ var AppMediator = (function($, _, amplify, DataFetcher, MapView, PieChart, BarCh
     DataFetcher.getCrimeData({date:date}, function(data){
       crimeMap.renderCrimeData(data);
     });
-    PieChart.render(date);
+    DataFetcher.getAggregateCrimeData({date:date}, function(data){
+      PieChart.draw(data);
+    });
   }
 
   function formatGameDate(date){
