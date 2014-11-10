@@ -102,7 +102,7 @@ var PieChart = (function(d3){
       that.svg.selectAll(".selected").classed("selected", false);
       d3.select(this).attr("class", "selected");
       this.parentNode.appendChild(this);
-      amplify.publish("pieClick", {data:d.data});
+      amplify.publish('pieClick', {data:d.data});
     });
   };
 

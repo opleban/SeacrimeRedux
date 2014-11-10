@@ -5,6 +5,20 @@ var AppMediator = (function($, _, amplify, DataFetcher, MapView, PieChart, BarCh
   var currentCrimeDate= "2014";
   var crimeMap, pieChart, barChart;
 
+  function formatGameDate(date){
+    return date.slice(0,10);
+  }
+
+  function displayDataDate(date){
+    if (date) {
+      currentCrimeDate = formatGameDate(date);
+    } else {
+      currentCrimeDate = "2014";
+    }
+    $displayDate.empty();
+    $displayDate.html(currentCrimeDate);
+  }
+
   function publicInit(){
     barChart = new BarChart.Chart({
       margin: {top: 20, right: 20, bottom: 10, left: 20},
@@ -32,39 +46,29 @@ var AppMediator = (function($, _, amplify, DataFetcher, MapView, PieChart, BarCh
     listenForYearSelection();
     listenForTeamSelection();
 
-    amplify.subscribe("pieClick", function(d){
+    amplify.subscribe('pieClick', function(d){
       var options = {eventGroup: d.data.event_clearance_group, date: currentCrimeDate};
+
       DataFetcher.getAggMonthlyDataByGroup(options.eventGroup, function(data, group){
         barChart.drawMonthly(data, group);
       });
+
       DataFetcher.getCrimeData(options, function(data){
         crimeMap.renderCrimeData(data);
       });
     });
-  }
 
-  function render(date){
-    displayDataDate(date);
-    DataFetcher.getCrimeData({date:date}, function(data){
-      crimeMap.renderCrimeData(data);
+    amplify.subscribe('teamSelect', function(d){
+      displayDataDate(d.date);
+
+      DataFetcher.getCrimeData({date:d.date}, function(data){
+        crimeMap.renderCrimeData(data);
+      });
+
+      DataFetcher.getAggregateCrimeData({date:d.date}, function(data, totalCrimeFigure){
+        pieChart.update(data, totalCrimeFigure, d.date);
+      });
     });
-    DataFetcher.getAggregateCrimeData({date:date}, function(data, totalCrimeFigure){
-      pieChart.update(data, totalCrimeFigure, date);
-    });
-  }
-
-  function formatGameDate(date){
-    return date.slice(0,10);
-  }
-
-  function displayDataDate(date){
-    if (date) {
-      currentCrimeDate = formatGameDate(date);
-    } else {
-      currentCrimeDate = "2014";
-    }
-    $displayDate.empty();
-    $displayDate.html(currentCrimeDate);
   }
 
   function listenForYearSelection(){
@@ -81,7 +85,7 @@ var AppMediator = (function($, _, amplify, DataFetcher, MapView, PieChart, BarCh
     $teamSelection.change(function(){
       var $currentSelection = $("select.team-selection option:selected");
       if ($currentSelection)
-        render($currentSelection.attr("x-game-date"));
+        amplify.publish('teamSelect', {date: $currentSelection.attr('x-game-date')});
     });
   }
 
