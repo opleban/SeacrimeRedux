@@ -1,3 +1,3 @@
-define(['app/AppMediator'], function(AppMediator){
-    AppMediator.init();
+define(['app/AppController'], function(AppController){
+    AppController.init();
 });
