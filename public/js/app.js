@@ -7,7 +7,7 @@ requirejs.config({
         d3: 'd3/d3.min',
         leaflet: 'leaflet/dist/leaflet',
         "leaflet.markercluster": 'leaflet.markercluster/dist/leaflet.markercluster',
-        _: 'underscore/underscore-min'
+        underscore: 'underscore/underscore-min'
     },
     shim: {
             'leaflet.markercluster': {

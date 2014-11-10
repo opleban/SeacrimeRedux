@@ -1,4 +1,4 @@
-define(['jquery', '_', 'amplify', 'app/DataFetcher', 'app/MapView', 'app/PieChart', 'app/BarChart'], function($, _, amplify, DataFetcher, MapView, PieChart, BarChart){
+define(['jquery', 'underscore', 'amplify', 'app/DataFetcher', 'app/MapView', 'app/PieChart', 'app/BarChart'], function($, _, amplify, DataFetcher, MapView, PieChart, BarChart){
   var $yearSelection = $("select.year-selection");
   var $teamSelection = $("select.team-selection");
   var $displayDate = $('#date');
@@ -72,6 +72,7 @@ define(['jquery', '_', 'amplify', 'app/DataFetcher', 'app/MapView', 'app/PieChar
   }
 
   function listenForYearSelection(){
+    debugger
     $yearSelection.change(function(){
       DataFetcher.getOpposingTeamNamesAndDates(this.value, function(data){
         var teamOptionsTemplate = _.template($("#select-template").html())({data:data});
