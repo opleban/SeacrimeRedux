@@ -72,7 +72,6 @@ define(['jquery', 'underscore', 'amplify', 'app/DataFetcher', 'app/MapView', 'ap
   }
 
   function listenForYearSelection(){
-    debugger
     $yearSelection.change(function(){
       DataFetcher.getOpposingTeamNamesAndDates(this.value, function(data){
         var teamOptionsTemplate = _.template($("#select-template").html())({data:data});
