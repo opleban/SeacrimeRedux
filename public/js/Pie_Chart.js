@@ -1,96 +1,127 @@
-//Pie Chart as a constructor and instantiate a new pie chart
-// more OO
 var PieChart = (function(d3, DataFetcher){
-
-  var width, height, radius, pie, color, arcRadius, tooltip, svg, arcGroup;
-
-
   function formatGameDate(date){
     return date.slice(0,10);
   }
 
-  // function publicRender(date){
-  //   if (date){
-  //     renderAggregateCrimeDataByDate(date);
-  //   } else {
-  //     renderAggregateCrimeData();
-  //   }
-  // }
+  var Chart = function(options){
+    this.width = options.width;
+    this.height = options.height;
+    this.el = options.el;
+    this.radius = (options.width/2) - 10;
+    this.color = d3.scale.category20c();
+  };
 
-  function displayNumberOfCrimesAndDate(number, date){
-    if (date){
-      var formattedDate = formatGameDate(date);
-    } else {
-      formattedDate = "2014";
-    }
+  Chart.prototype.setDimensions = function(){
+    var that = this;
+    that.svg = that.svg || d3.select(that.el).append("svg")
+        .attr("width", that.width)
+        .attr("height", that.height)
+        .append("g")
+        .attr("transform", "translate(" + that.width/2 + "," + (that.width+50)/2 + ")" + "rotate(" + 270 +")");
 
-    var $crimeTotal = $("#crime-total");
-    var totalCrimeTemplate =  _.template($("#crime-total-template").html())({number:number, date: formattedDate});
-    $crimeTotal.empty();
-    $crimeTotal.append(totalCrimeTemplate);
-  }
-
-  function draw(data){
-    width = width || 600;
-    height = height || 350;
-    radius = radius || (width/2) - 10;
-    color =  color || d3.scale.category20c();
-
-    pie = pie || d3.layout.pie()
+    that.pie = d3.layout.pie()
       .value(function(d) { return d.total; })
       .startAngle(0)
       .endAngle(Math.PI);
 
-    arcRadius = arcRadius || d3.svg.arc()
-    .innerRadius(radius - 150)
-    .outerRadius(radius - 20);
+    that.arcRadius = d3.svg.arc()
+      .innerRadius(that.radius - 150)
+      .outerRadius(that.radius - 30);
+  };
 
-    tooltip = tooltip || d3.select("body").append('div')
-    .attr('class', 'pie-tooltip')
-    .style('opacity', 0);
+  Chart.prototype.setTooltip = function(){
+    var that = this;
+    that.tooltip = that.tooltip || d3.select("body").append('div')
+      .attr('class', 'pie-tooltip')
+      .style('opacity', 0);
+  };
 
-    svg = svg || d3.select("#pie-chart").append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .append("g")
-      .attr("transform", "translate(" + width / 2 + "," + width/2 + ")" + "rotate(" + 270 +")");
-    var arcGroup = svg.selectAll(".arc").data(pie(data));
-        arcGroup.enter().append("g")
-            .attr("class", "arc")
-        arcGroup.exit().remove();
-    var arcPath = arcGroup.selectAll("path").data(pie(data))
-        arcPath.enter().append("path");
-        arcPath.transition().duration(500)
-            .attr("d", arcRadius)
-            .style("fill", function(d){ return color(d.data.event_clearance_group); });
-        arcPath.exit().remove();
+  Chart.prototype.setChartHeader = function(totalCrimeFigure){
+    var that = this;
+    that.crimeFigureHeader = that.svg.append('text')
+      .attr('class', 'total-crimes')
+      .text('Total number of reported crimes: ' + totalCrimeFigure)
+      .attr('text-anchor', 'middle')
+      .attr('font-family', 'sans-serif')
+      .attr('font-size', '20px')
+      .attr('fill', 'black')
+      .attr('transform', 'translate(' + that.width/2 + ',' + '0' + ')' + 'rotate(' + 90 +')');
+    that.crimeDateHeader = that.svg.append('text')
+      .attr('class', 'crime-date')
+      .text('(2014)')
+      .attr('text-anchor', 'middle')
+      .attr('font-family', 'sans-serif')
+      .attr('font-size', '20px')
+      .attr('fill', 'black')
+      .attr('transform', 'translate(' + 270 + ',' + "0" + ')' + 'rotate(' + 90 +')');
+
+  };
+
+  Chart.prototype.updateChartHeader = function(totalCrimeFigure, date){
+    var that = this;
+    var formattedDate = date ? formatGameDate(date) : "2014";
+    that.crimeFigureHeader.text('Total number of reported crimes: ' + totalCrimeFigure)
+    that.crimeDateHeader.text( '(' + formattedDate + ')' );
+  };
+
+  Chart.prototype.setPieArc = function(data){
+    var that = this;
+    var arcGroup, arcPath;
+    arcGroup = that.svg.selectAll('.arc').data(that.pie(data));
+    arcGroup.enter().append('g')
+        .attr('class', 'arc');
+    arcGroup.exit().remove();
+
+    arcPath = arcGroup.selectAll('path').data(that.pie(data));
+    arcPath.enter().append('path');
+    arcPath.transition().duration(500)
+        .attr('d', that.arcRadius)
+        .style('fill', function(d){ return that.color(d.data.event_clearance_group); });
+    arcPath.exit().remove();
+
     arcPath.on('mouseover', function(d, i){
       d3.select(this).transition()
-        .style("fill", "orangered")
-      tooltip.transition()
+        .style("fill", "orangered");
+      that.tooltip.transition()
         .duration(200)
         .style('opacity', 1);
-      tooltip.html('Crime: ' + d.data.event_clearance_group + '<br/> Number of incidents: ' + d.data.total)
+      that.tooltip.html('Crime: ' + d.data.event_clearance_group + '<br/> Number of incidents: ' + d.data.total)
         .style('left', (d3.event.pageX) + 'px')
         .style('top', (d3.event.pageY - 30) + 'px');
-    })
-      .on('mouseout', function(d){
+    });
+
+    arcPath.on('mouseout', function(d){
         d3.select(this).transition()
-          .style("fill", function(d){ return color(d.data.event_clearance_group)} );
-        tooltip.transition()
+          .style("fill", function(d){ return that.color(d.data.event_clearance_group)} );
+        that.tooltip.transition()
           .duration(200)
           .style('opacity', 0);
-      })
-     .on('click', function(d){
-        svg.selectAll(".selected").classed("selected", false);
-        d3.select(this).attr("class", "selected");
-        this.parentNode.appendChild(this);
-        amplify.publish("pieClick", {data:d.data});
-      });
-  }
+    });
+
+    arcPath.on('click', function(d){
+      that.svg.selectAll(".selected").classed("selected", false);
+      d3.select(this).attr("class", "selected");
+      this.parentNode.appendChild(this);
+      amplify.publish("pieClick", {data:d.data});
+    });
+  };
+
+  Chart.prototype.draw = function(data, totalCrimeFigure){
+    var that = this;
+    that.setDimensions();
+    that.setTooltip();
+    that.setChartHeader(totalCrimeFigure);
+    that.setPieArc(data);
+  };
+
+  Chart.prototype.update = function(data, totalCrimeFigure, date){
+    var that = this;
+    that.updateChartHeader(totalCrimeFigure, date);
+    that.setPieArc(data);
+  };
 
   return {
-    draw: draw
+    Chart: Chart,
   };
 
 }(d3, DataFetcher));
