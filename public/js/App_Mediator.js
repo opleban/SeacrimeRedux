@@ -13,19 +13,29 @@ var AppMediator = (function($, _, amplify, DataFetcher, MapView, PieChart, BarCh
     });
 
     displayDataDate();
-    MapView.renderCrimeData();
+    DataFetcher.getCrimeData({}, function(data){
+      MapView.renderCrimeData(data);
+    });
     PieChart.init();
     listenForYearSelection();
     listenForTeamSelection();
     amplify.subscribe("pieClick", function(d){
-      barChart.drawMonthly(d.data.event_clearance_group);
-      MapView.renderCrimeDataByEventGroup(d.data.event_clearance_group, currentCrimeDate);
+      var options = {eventGroup: d.data.event_clearance_group, date: currentCrimeDate};
+      DataFetcher.getAggMonthlyDataByGroup(options.eventGroup, function(data, group){
+          barChart.drawMonthly(data, group);
+      });
+      DataFetcher.getCrimeData(options, function(data){
+        debugger;
+        MapView.renderCrimeData(data);
+      });
     });
   }
 
   function render(date){
     displayDataDate(date);
-    MapView.renderCrimeData(date);
+    DataFetcher.getCrimeData({}, function(data){
+      MapView.renderCrimeData(data);
+    });
     PieChart.render(date);
   }
 

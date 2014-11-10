@@ -42,7 +42,6 @@ var SoQLQueryMaker = (function(){
         return [URL_BASE, selectStatement, whereStatement, orderStatement].join("&");
       }
       if (options.date !== DEFAULT_YEAR && options.date){
-        console.log(options.date)
         where.push(makeDateWhereStatement(options.date));
       } else {
         where.push("(at_scene_time >= '" + timeRange(CUT_OFF_DATE).start + "')");

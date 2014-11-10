@@ -16,7 +16,7 @@ var MapView = (function($, _, L, DataFetcher){
               .addLayer(new L.TileLayer(MAPBOX_URL));
   }
 
-  function renderCrimeDataOnMap(data){
+  function renderCrimeData(data){
     markers.clearLayers();
     data.forEach(function(crime){
       var marker = new L.marker(
@@ -37,18 +37,10 @@ var MapView = (function($, _, L, DataFetcher){
   }
 
   return {
-    renderCrimeDataByEventGroup: function(eventGroup, date){
-        DataFetcher.getCrimeData({eventGroup:eventGroup, date:date}, renderCrimeDataOnMap);
-    },
-
-    renderCrimeData: function(date){
-      // if no date is provided, then map will display most recent crime data. If a date is provided, then map will display only crime data from that date.
-      if (date){
-        DataFetcher.getCrimeData({date:date}, renderCrimeDataOnMap);
-      } else {
-        DataFetcher.getCrimeData({}, renderCrimeDataOnMap);
-      }
-    },
+    // renderCrimeDataByEventGroup: function(eventGroup, date){
+    //     DataFetcher.getCrimeData({eventGroup:eventGroup, date:date}, renderCrimeDataOnMap);
+    // },
+      renderCrimeData: renderCrimeData
   };
 
 }(jQuery, _, L, DataFetcher));

@@ -1,11 +1,6 @@
 //Bar Chart as a constructor and instantiate a new bar chart
 var BarChart = (function(d3, DataFetcher){
 
-  function getMonthName(monthNumber){
-    var MONTH_NAME = {0:'Jan',  1:'Feb' , 2:'Mar' , 3:'Apr', 4:'May', 5:'Jun' , 6:'Jul', 7:'Aug', 8:'Sept', 9:'Oct', 10:'Nov', 11:'Dec'};
-    return MONTH_NAME[monthNumber];
-  }
-
   var Chart = function (options){
     this.margin = options.margin;
     this.width = options.width;
@@ -13,19 +8,18 @@ var BarChart = (function(d3, DataFetcher){
     this.el = options.el;
   };
 
-  Chart.prototype.getMonthlyData = function(eventGroup, callbackFn){
-    var that = this;
-    DataFetcher.getAggregateMonthlyCrimeDataByEventGroup(eventGroup, function(data){
-      data.forEach(function(d) {
-        d.date = d3.time.format("%Y-%m-%dT%H:%M:%S").parse(d.date);
-        d.month = getMonthName(d.date.getMonth());
-        d.total = +d.total;
-      });
-      that.data = data;
-      // Chart drawing occurs in callback function after data is fetched.
-      callbackFn();
-    });
-  };
+  // Chart.prototype.getMonthlyData = function(eventGroup, callbackFn){
+  //   var that = this;
+  //   DataFetcher.getAggregateMonthlyCrimeDataByEventGroup(eventGroup, function(data){
+  //     data.forEach(function(d) {
+  //       d.date = d3.time.format("%Y-%m-%dT%H:%M:%S").parse(d.date);
+  //       d.month = getMonthName(d.date.getMonth());
+  //       d.total = +d.total;
+  //     });
+  //     // Chart drawing occurs in callback function after data is fetched.
+  //     callbackFn(data);
+  //   });
+  // };
 
   Chart.prototype.setDimensions = function(){
     var that = this;
@@ -49,32 +43,32 @@ var BarChart = (function(d3, DataFetcher){
       .attr("y", 15);
   };
 
-  Chart.prototype.setAxes = function(){
+  Chart.prototype.setAxes = function(data){
     var that = this;
     that.x = d3.scale.ordinal()
       .rangeRoundBands([0, that.width], 0, 0)
-      .domain(that.data.map(function(d){ return d.month; }));
+      .domain(data.map(function(d){ return d.month; }));
 
     that.y = d3.scale.linear()
       .range([that.height, 25])
-      .domain([0, d3.max(that.data, function(d) { return d.total; })]);
+      .domain([0, d3.max(data, function(d) { return d.total; })]);
 
     that.xAxis = d3.svg.axis()
       .scale(that.x)
-      .ticks(that.data.length)
+      .ticks(data.length)
       .orient("bottom");
 
-    that.ticks = that.svg.selectAll("g.tick").data(that.data);
+    that.ticks = that.svg.selectAll("g.tick").data(data);
     that.ticks.enter().append("g.tick");
     that.ticks.text(function(d) { return d.total; });
     that.ticks.exit().remove();
   };
 
-  Chart.prototype.drawBars = function(){
+  Chart.prototype.drawBars = function(data){
     var rect, barWidth, barText;
     var that = this;
-    barWidth = Math.floor(this.width / this.data.length) - 7;
-    rect = this.svg.selectAll("rect").data(this.data);
+    barWidth = Math.floor(this.width / data.length) - 7;
+    rect = this.svg.selectAll("rect").data(data);
     rect.enter().append("rect");
     rect.transition().duration(500)
       .style("fill", "#4EAE47")
@@ -87,12 +81,12 @@ var BarChart = (function(d3, DataFetcher){
       });
     rect.exit().remove();
 
-    barText = that.svg.selectAll("text.bar-text").data(that.data);
+    barText = that.svg.selectAll("text.bar-text").data(data);
     barText.enter().append("text");
     barText.transition().duration(500)
       .attr("class", "bar-text")
       .text(function(d) { return d.total; })
-      .attr("x", function(d, i){ return i * (that.width/that.data.length) + barWidth/2; })
+      .attr("x", function(d, i){ return i * (that.width/data.length) + barWidth/2; })
       .attr("y", function(d){return that.y(d.total) + 13; })
       .attr("font-family", "sans-serif")
       .attr("text-anchor", "middle")
@@ -109,15 +103,13 @@ var BarChart = (function(d3, DataFetcher){
       .call(that.xAxis);
   };
 
-  Chart.prototype.drawMonthly = function(eventGroup){
+  Chart.prototype.drawMonthly = function(data, eventGroup){
     var that = this;
-    that.getMonthlyData(eventGroup, function(){
-      that.setDimensions();
-      that.drawChartTitle();
-      that.setAxes();
-      that.drawBars();
-      that.drawXAxis();
-    });
+    that.setDimensions(data);
+    that.drawChartTitle(eventGroup);
+    that.setAxes(data);
+    that.drawBars(data);
+    that.drawXAxis();
   };
 
 
