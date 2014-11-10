@@ -1,4 +1,4 @@
-var DataFetcher = (function($, SoQLQueryMaker){
+define(['jquery', 'app/SoQLQueryMaker'], function($, SoQLQueryMaker){
 
   TEAM_NAMES = {DAL:"Dallas Cowboys", SF:"San Francisco 49ers", JAC:"Jacksonville Jaguars", TEN: "Tennessee Titans", GB:"Green Bay Packers", TB:"Tampa Bay Buccaneers", MIN:"Minnesota Vikings", NO:"New Orleans Saints", ARI: "Arizona Cardinals", STL:"St. Louis Rams", NE: "New England Patriots", NYJ:"New York Jets", DEN:"Denver Broncos", OAK: "Oakland Raiders", NYG: "New York Giants", STL: "St. Louis Rams"};
 
@@ -72,4 +72,4 @@ var DataFetcher = (function($, SoQLQueryMaker){
         });
     },
   };
-}(jQuery, SoQLQueryMaker));
+});

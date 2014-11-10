@@ -1,4 +1,4 @@
-var AppMediator = (function($, _, amplify, DataFetcher, MapView, PieChart, BarChart){
+define(['jquery', '_', 'amplify', 'app/DataFetcher', 'app/MapView', 'app/PieChart', 'app/BarChart'], function($, _, amplify, DataFetcher, MapView, PieChart, BarChart){
   var $yearSelection = $("select.year-selection");
   var $teamSelection = $("select.team-selection");
   var $displayDate = $('#date');
@@ -92,6 +92,4 @@ var AppMediator = (function($, _, amplify, DataFetcher, MapView, PieChart, BarCh
   return {
     init: publicInit
   };
-}(jQuery, _, amplify, DataFetcher, MapView, PieChart, BarChart));
-
-AppMediator.init();
+});

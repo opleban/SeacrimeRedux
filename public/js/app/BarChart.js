@@ -1,4 +1,4 @@
-var BarChart = (function(d3){
+define(['d3'], function(d3){
 
   var Chart = function (options){
     this.margin = options.margin;
@@ -102,4 +102,4 @@ var BarChart = (function(d3){
   return{
     Chart: Chart,
   };
-}(d3));
+});

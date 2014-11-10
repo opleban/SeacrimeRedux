@@ -8,12 +8,7 @@
     <link rel="stylesheet" href="/bower_components/leaflet.markercluster/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="/bower_components/leaflet.markercluster/dist/MarkerCluster.Default.css" />
     <link rel="stylesheet" href="css/app.css">
-    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="/bower_components/amplify/lib/amplify.core.min.js"></script>
-    <script src="/bower_components/d3/d3.min.js"></script>
-    <script src="/bower_components/leaflet/dist/leaflet.js"></script>
-    <script src="/bower_components/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-    <script src="/bower_components/underscore/underscore-min.js"></script>
+    <script data-main="js/app" src="js/lib/require.js"></script>
   </head>
 
   <body>
@@ -76,13 +71,5 @@ See App_View.js-->
         <option x-team-name=<%= team.teamName %> x-game-date=<%= team.gameDate %>> <%=team.teamName %></option>
       <% }) %>
     </script>
-
-    <script src="/bower_components/require/build/require.min.js"></script>
-    <script src="js/SoQL_Query_Maker.js"></script>
-    <script src="js/Data_Fetcher.js"></script>
-    <script src="js/Map_View.js"></script>
-    <script src="js/Pie_Chart.js"></script>
-    <script src="js/Bar_Chart.js"></script>
-    <script src="js/App_Mediator.js"></script>
   </body>
 </html>

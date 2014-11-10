@@ -1,6 +1,4 @@
-// use require JS
-// have top-level module called main js, and the main js would make reference to all of my module
-var MapView = (function(L){
+define( ['leaflet', "leaflet.markercluster"], function(L, cluster){
   var MAPBOX_URL = "http://{s}.tiles.mapbox.com/v3/opleban.j9f7bfle/{z}/{x}/{y}.png";
   var CENTURYLINK_COORDINATES = [47.595372, -122.331363];
 
@@ -35,4 +33,4 @@ var MapView = (function(L){
       Map: Map
   };
 
-}(L));
+});

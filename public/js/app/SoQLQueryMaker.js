@@ -1,4 +1,4 @@
-var SoQLQueryMaker = (function(){
+define(function(){
   var APP_TOKEN = "jSj3qjGlEI09fjgkmKDHrH4mp";
   var URL_BASE = "https://data.seattle.gov/resource/3k2p-39jp.json?$$app_token=" + APP_TOKEN;
   var WITHIN_A_MILE_OF_CENTURY_LINK = "within_circle(incident_location, 47.595941, -122.331515, 1610)";
@@ -86,4 +86,4 @@ var SoQLQueryMaker = (function(){
       return [URL_BASE, selectStatement, whereStatement, orderStatement, groupStatement].join("&");
     }
   };
-}());
+});
