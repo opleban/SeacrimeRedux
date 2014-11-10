@@ -1,4 +1,4 @@
-var BarChart = (function(d3, DataFetcher){
+var BarChart = (function(d3){
 
   var Chart = function (options){
     this.margin = options.margin;
@@ -102,4 +102,4 @@ var BarChart = (function(d3, DataFetcher){
   return{
     Chart: Chart,
   };
-}(d3, DataFetcher));
+}(d3));

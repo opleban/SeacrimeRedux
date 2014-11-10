@@ -13,8 +13,6 @@ var AppMediator = (function($, _, amplify, DataFetcher, MapView, PieChart, BarCh
       el: '#bar-chart'
     });
 
-    displayDataDate();
-
     crimeMap = new MapView.Map();
 
     pieChart = new PieChart.Chart({

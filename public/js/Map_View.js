@@ -4,7 +4,7 @@
 // Jasmine tests, tests the constructor function and its property, any methods
 // check that the dom elements are the right side and color
 // check that the colors are right
-var MapView = (function($, _, L, DataFetcher){
+var MapView = (function(L){
   var MAPBOX_URL = "http://{s}.tiles.mapbox.com/v3/opleban.j9f7bfle/{z}/{x}/{y}.png";
   var CENTURYLINK_COORDINATES = [47.595372, -122.331363];
 
@@ -39,4 +39,4 @@ var MapView = (function($, _, L, DataFetcher){
       Map: Map
   };
 
-}(jQuery, _, L, DataFetcher));
+}(L));

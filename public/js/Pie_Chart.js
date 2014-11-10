@@ -1,4 +1,4 @@
-var PieChart = (function(d3, DataFetcher){
+var PieChart = (function(d3){
   function formatGameDate(date){
     return date.slice(0,10);
   }
@@ -124,4 +124,4 @@ var PieChart = (function(d3, DataFetcher){
     Chart: Chart,
   };
 
-}(d3, DataFetcher));
+}(d3));
