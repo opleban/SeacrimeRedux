@@ -1,6 +1,10 @@
 //Pie Chart as a constructor and instantiate a new pie chart
 // more OO
 var PieChart = (function(d3, DataFetcher){
+
+  var Pie = function(){
+
+  }
   var width, height, radius, pie, color, arcRadius, tooltip, svg, arcGroup;
 
   function publicInit(){

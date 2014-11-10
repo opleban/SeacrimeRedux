@@ -7,17 +7,16 @@
 var MapView = (function($, _, L, DataFetcher){
   var MAPBOX_URL = "http://{s}.tiles.mapbox.com/v3/opleban.j9f7bfle/{z}/{x}/{y}.png";
   var CENTURYLINK_COORDINATES = [47.595372, -122.331363];
-  var map = map || createMap();
-  var markers = L.markerClusterGroup();
 
-  function createMap(){
-    if ($('#map').length)
-      return L.map("map", {center:CENTURYLINK_COORDINATES, zoom:14, scrollWheelZoom:false})
-              .addLayer(new L.TileLayer(MAPBOX_URL));
-  }
+  var Map = function(){
+    this.map = L.map("map", {center:CENTURYLINK_COORDINATES, zoom:14, scrollWheelZoom:false})
+                .addLayer(new L.TileLayer(MAPBOX_URL));
+    this.markers = L.markerClusterGroup();
+  };
 
-  function renderCrimeData(data){
-    markers.clearLayers();
+  Map.prototype.renderCrimeData = function(data){
+    var that = this;
+    that.markers.clearLayers();
     data.forEach(function(crime){
       var marker = new L.marker(
         [crime.incident_location.latitude,
@@ -31,16 +30,13 @@ var MapView = (function($, _, L, DataFetcher){
         + "<br/> Date: "
         + crime.at_scene_time
         + "</p>");
-      markers.addLayer(marker);
+      that.markers.addLayer(marker);
     });
-    map.addLayer(markers);
+    that.map.addLayer(that.markers);
   }
 
   return {
-    // renderCrimeDataByEventGroup: function(eventGroup, date){
-    //     DataFetcher.getCrimeData({eventGroup:eventGroup, date:date}, renderCrimeDataOnMap);
-    // },
-      renderCrimeData: renderCrimeData
+      Map: Map
   };
 
 }(jQuery, _, L, DataFetcher));

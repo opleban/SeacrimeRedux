@@ -3,6 +3,7 @@ var AppMediator = (function($, _, amplify, DataFetcher, MapView, PieChart, BarCh
   var $teamSelection = $("select.team-selection");
   var $displayDate = $('#date');
   var currentCrimeDate= "2014";
+  var crimeMap;
 
   function publicInit(){
     var barChart = new BarChart.Chart({
@@ -13,28 +14,29 @@ var AppMediator = (function($, _, amplify, DataFetcher, MapView, PieChart, BarCh
     });
 
     displayDataDate();
+    crimeMap = new MapView.Map();
     DataFetcher.getCrimeData({}, function(data){
-      MapView.renderCrimeData(data);
+      crimeMap.renderCrimeData(data);
     });
     PieChart.init();
     listenForYearSelection();
     listenForTeamSelection();
+
     amplify.subscribe("pieClick", function(d){
       var options = {eventGroup: d.data.event_clearance_group, date: currentCrimeDate};
       DataFetcher.getAggMonthlyDataByGroup(options.eventGroup, function(data, group){
-          barChart.drawMonthly(data, group);
+        barChart.drawMonthly(data, group);
       });
       DataFetcher.getCrimeData(options, function(data){
-        debugger;
-        MapView.renderCrimeData(data);
+        crimeMap.renderCrimeData(data);
       });
     });
   }
 
   function render(date){
     displayDataDate(date);
-    DataFetcher.getCrimeData({}, function(data){
-      MapView.renderCrimeData(data);
+    DataFetcher.getCrimeData({date:date}, function(data){
+      crimeMap.renderCrimeData(data);
     });
     PieChart.render(date);
   }
